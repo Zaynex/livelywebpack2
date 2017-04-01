@@ -1,47 +1,75 @@
-const webpack = require("webpack");
-// const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+var path = require('path');
+var HtmlwebpackPlugin = require('html-webpack-plugin');
+var webpack = require('webpack');
+
+var ROOT_PATH = path.resolve(__dirname);
+var APP_PATH = path.resolve(ROOT_PATH, 'app');
+var TEM_PATH = path.resolve(ROOT_PATH, 'templates');
+var BUILD_PATH = path.resolve(ROOT_PATH, 'build');
+var BOWER_PATH = path.resolve(ROOT_PATH, 'bower_components');
+
 module.exports = {
-	devtool: 'eval-source-map',
-	entry: __dirname + '/app/main.js',
-	output: {
-		path: __dirname + '/build',
-		filename: "bundle.js"	
-	},
-	module: {
-		loaders: [
-			{
-				test: /\.json$/,
-				loader: 'json'
-			},{
-				test: /\.js$/,
-				exclude: /node_modules/,
-				loader: 'babel'
-			},{
-				test: /\.css$/,
-				loader: ExtractTextPlugin.extract('style', 'css?modules!postcss')
-			}
-		]
-	},
-	postcss: [
-		require('autoprefixer')
-	],
-
-	plugins: [
-		// new HtmlWebpackPlugin({
-		// 	template: __dirname + '/app/index.tmpl.html'
-		// }),
-		new webpack.optimize.UglifyJsPlugin(),
-		new webpack.optimize.OccurenceOrderPlugin(),
-		new ExtractTextPlugin("[name]-[hash].css")
-	],
-
-	devServer: {
-		contentBase: './public', //本地服务器加载的页面的所在目录
-		colors: true,
-		historyApiFallback: true,
-		inline: true, //实时刷新
-		port: 8080 //默认端口，也可以不写
-	}
-
-}
+  entry: {
+    app: path.resolve(APP_PATH, 'index.js'),
+    mobile: path.resolve(APP_PATH, 'mobile.js'),
+    vendors: ['jquery', 'moment', 'lodash']
+  },
+  output: {
+    path: BUILD_PATH,
+    filename: '[name].[hash].js'
+  },
+  resolve: {
+    alias: {
+      lodash: path.resolve(BOWER_PATH, 'lodash/lodash.js')
+    }
+  },
+  module: {
+    loaders: [
+      {
+        test: /\.jsx?$/,
+        loader: 'babel',
+        include: APP_PATH,
+        query: {
+          presets: ['es2015']
+        }
+      },
+      {
+        test: /\.scss$/,
+        loaders: ['style', 'css', 'sass'],
+        include: APP_PATH
+      },
+      {
+        test: /\.(png|jpg)$/,
+        loader: 'url?limit=40000'
+      }
+    ]
+  },
+  plugins: [
+    //enable uglify
+    new webpack.optimize.UglifyJsPlugin({minimize: true}),
+    //split vendors script
+    new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.js'),
+    //generate two pages
+    new HtmlwebpackPlugin({
+      title: 'Hello World app',
+      template: path.resolve(TEM_PATH, 'index.html'),
+      filename: 'index.html',
+      chunks: ['app', 'vendors'],
+      inject: 'body'
+    }),
+    new HtmlwebpackPlugin({
+      title: 'Hello Mobile app',
+      template: path.resolve(TEM_PATH, 'mobile.html'),
+      filename: 'mobile.html',
+      chunks: ['mobile', 'vendors'],
+      inject: 'body'
+    })
+    //provide $, jQuery and window.jQuery to every script
+    /*new webpack.ProvidePlugin({
+      $: "jquery",
+      jQuery: "jquery",
+      "window.jQuery": "jquery"
+    })*/
+  ]
+};

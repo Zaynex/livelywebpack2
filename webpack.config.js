@@ -1,29 +1,93 @@
-const webpack = require("webpack");
-// const HtmlWebpackPlugin = require('html-webpack-plugin');
-const path = require('path');
+
+var path = require('path');
+var webpack = require('webpack');
+var HtmlwebpackPlugin = require('html-webpack-plugin');
+
+var ROOT_PATH = path.resolve(__dirname);
+var APP_PATH = path.resolve(ROOT_PATH, 'app');
+var BUILD_PATH = path.resolve(ROOT_PATH, 'build');
+var TEM_PATH = path.resolve(ROOT_PATH, 'templates');
+var BOWER_PATH = path.resolve(ROOT_PATH, 'bower_components');
+
 module.exports = {
-	// devtool: 'eval-source-map',
-	entry: __dirname + '/app/index.js',
-	output: {
-		path: __dirname + '/dist',
-		filename: "bundle.js"	
-	},
-	module: {
-		loaders: [
-			{
-				test: /\.css$/,
-				loader: 'css-loader'
-			}
-		]
-	},
-	plugins: [
-		new webpack.HotModuleReplacementPlugin()
-	],
-	devServer: {
-		contentBase: './public', //本地服务器加载的页面的所在目录
-		historyApiFallback: true,
-		inline: true, //实时刷新
-		hot: true, // 热更新
-		port: 8080 //默认端口，也可以不写
-	}
-}
+  entry: {
+    app: path.resolve(APP_PATH, 'index.js'),
+    mobile: path.resolve(APP_PATH, 'mobile.js'),
+    vendors: ['jquery', 'moment', 'lodash']
+  },
+  output: {
+    path: BUILD_PATH,
+    filename: '[name].js'
+  },
+  resolve: {
+    alias: {
+      lodash: path.resolve(BOWER_PATH, 'lodash/lodash.js')
+    }
+  },
+  //enable dev source map
+  devtool: 'eval-source-map',
+  //enable dev server
+  devServer: {
+    historyApiFallback: true,
+    hot: true,
+    inline: true,
+    progress: true,
+    port: 8888
+  },
+  module: {
+    preLoaders: [
+      {
+        test: /\.jsx?$/,
+        include: APP_PATH,
+        loader: "jshint-loader"
+      }
+    ],
+    loaders: [
+      {
+        test: /\.jsx?$/,
+        loader: 'babel',
+        include: APP_PATH,
+        query: {
+          presets: ['es2015']
+        }
+      },
+      {
+        test: /\.scss$/,
+        loaders: ['style', 'css?sourceMap', 'sass?sourceMap'],
+        include: APP_PATH
+      },
+      {
+        test: /\.(png|jpg)$/,
+        loader: 'url?limit=40000'
+      }
+    ]
+  },
+
+  //custom jshint options
+  // any jshint option http://www.jshint.com/docs/options/
+  jshint: {
+    "esnext": true
+  },
+
+  plugins: [
+    new HtmlwebpackPlugin({
+      title: 'Hello World app',
+      template: path.resolve(TEM_PATH, 'index.html'),
+      filename: 'index.html',
+      chunks: ['app', 'vendors'],
+      inject: 'body'
+    }),
+    // new HtmlwebpackPlugin({
+    //   title: 'Hello Mobile app',
+    //   template: path.resolve(TEM_PATH, 'mobile.html'),
+    //   filename: 'mobile.html'
+    // }),
+    new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.js')
+    //provide $, jQuery and window.jQuery to every script
+    /*new webpack.ProvidePlugin({
+      $: "jquery",
+      jQuery: "jquery",
+      "window.jQuery": "jquery"
+    })*/
+  ]
+};
