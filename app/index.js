@@ -1,7 +1,7 @@
 import './main.scss';
 import generateText from './sub';
 import moment from 'moment';
-import _ from 'lodash';
+// import _ from 'lodash';
 /*
  * 引入jquery plugin 有两种方法
  * 第一种把jQuery直接作成一个全局变量 这样在每个脚本中都可以直接使用
@@ -18,111 +18,106 @@ import _ from 'lodash';
 import $ from 'jquery';
 import 'imports?jQuery=jquery!./plugin.js';
 //2nd way end
-var insideImg = {
-    '36kr': './app/imgs/36kr.jpg',        
-    'book': './app/imgs/book.jpg',
-    'note': './app/imgs/note.jpg',
-    'cd': './app/imgs/cd.jpg',
-    'logo': './app/imgs/logo.jpg',
-    'yw': './app/imgs/yw.jpg',
-    'youdao': './app/imgs/youdao.jpg',
-    'pm': './app/imgs/pm.jpg',
-    'banner': './app/imgs/banner-img.jpg'
+var insideImg 
+        = {
+        '36kr': './app/imgs/small/36kr.png',        
+        'email': './app/imgs/small/email.png',
+        'get': './app/imgs/small/get.png',
+        'news': './app/imgs/small/news.png',
+        'icon': './app/imgs/small/icon.png',
+        'wechat': './app/imgs/small/wechat.png',
+        'weibo': './app/imgs/small/weibo.png',
+        'zhihu': './app/imgs/small/zhihu.png',
+        'read': './app/imgs/small/read.png'
+        },
+    iMinZindex = 2
+var _$ = function(node){
+    return document.querySelector(node);
+};
+var _$$ = function(nodes){
+    return document.querySelectorAll(nodes);
 };
 
-var _$ = function(node){
-    return document.querySelector(node)
-}
-
-
-
-window.onload = function(){
-    var aLi = document.querySelectorAll('li');
-    var aPos=[];
-    for(var i=0; i< aLi.length; i++)
-    {
-        aPos[i]={left: aLi[i].offsetLeft, top: aLi[i].offsetTop};
-    }
-    console.log(aPos);
-}
+var $matrix = _$('.matrix');
 function init(){
+    var centerImg = getQueryStrings() && getQueryStrings().keyfrom;
+    if(centerImg) {
+        insideImg.icon = 'app/imgs/big/' + centerImg + '.png';
+    }
     var imglist = "";
     for(let j in insideImg){
         imglist += '<li  style="postion:absolute"><img src="' + insideImg[j] + '"></li>';
     }
-    _$(".matrix").innerHTML = imglist;
-  var oUl = _$(".matrix");
-  
-  var iMinZindex=2;
-  var fontSize = document.documentElement.style.fontSize;
-  var defaultFont = 16;
-    
-
-  //布局转换
-  // 因为是动态插入的，所以只能在window.onload之后再获取节点
- 
-  
-  
-//   for(i=0;i<aLi.length;i++)
-//     {
-//         aLi[i].style.left=aPos[i].left +'px';
-//         aLi[i].style.top=aPos[i].top +'px';
-        
-//         aLi[i].style.position='absolute';
-//         aLi[i].style.margin='0';
-        
-//         aLi[i].index=i;
-//     }
-
-    var once,lastAim;
-    var notFinsh = true;
-
-    function startup(e){
-      // 防止点击空白部分也跳出
-      if(e && !e.target.src){
-        return false;
-      }
-      if(notCenter(e)) {
-          // 点击的图片跑到中间
-          startMove(e.target.parentNode, aPos[4]);
-          if(!once){
-              startMove(findImg(), {left: e.target.parentNode.offsetLeft, top: e.target.parentNode.offsetTop});
-              once = true;
-          }else {
-              // 中间的图片跑到点击的位置
-              lastAim.style.transform = 'scale(1, 1)';
-              startMove(lastAim, {left: e.target.parentNode.offsetLeft, top: e.target.parentNode.offsetTop});
-          }
-          lastAim = e.target.parentNode;
-      }
-      bigImg(e.target.parentNode);
-    }
-    function notCenter(e){
-        if(e.target.parentNode.style.left !== '230px' || e.target.parentNode.style.top !== '180px') {
-            console.log("不在中间");
-            return true;
-        }
-        return false;
-    }
-    function findImg(){
-        return aLi[4];
-    }
-    var lastNode;
-    function bigImg(node){
-        node.style.transform = 'scale(1.5, 1.5)';
-        node.style.zIndex = iMinZindex++;
-    }
-    oUl.addEventListener('touchend',startup, false);
+    $matrix.innerHTML = imglist;
+    bigImg($matrix.children[4])
 }
-
-
 init();
 
 
+window.onload = function(){
+    var aLi = _$$('li'),
+        aPos = [];
+    // 获得当前的状态获得他们的left和top
+    for(let i = 0;i < aLi.length; i++) {
+        aPos[i] = {left: aLi[i].offsetLeft, top: aLi[i].offsetTop};
+    }
+
+    for(let j = 0; j <aLi.length; j++) {
+        aLi[j].style.left = aPos[j].left + 'px';
+        aLi[j].style.top = aPos[j].top + 'px';
+
+        aLi[j].style.position = 'absolute';
+        aLi[j].style.margin = '0';
+        aLi[j].index = j;
+    }
+
+    var once, 
+        lastAim,
+        lastNode,
+        notFinsh = true;
+    function startup(e) {
+        e.target.src = changeImg(e.target.src, 'small', 'big');
+        for(var i = 0; i < aLi.length; i++) {
+            if(~aLi[i].style.transform.indexOf('scale')) {
+                aLi[i].style.transform = '';
+            }
+        }
+        if(e && !e.target.src) {
+            return false;
+        }
+        startMove(e.target.parentNode, aPos[4]);
+        if(!once) {
+            startMove(findImg(), {left: e.target.parentNode.offsetLeft, top: e.target.parentNode.offsetTop})
+            once = true;
+        }else {
+            lastAim.firstChild.src = changeImg(lastAim.firstChild.src, 'big', 'small');
+            lastAim.style.transform = 'scale(1,1)';
+            startMove(lastAim, {left: e.target.parentNode.offsetLeft, top: e.target.parentNode.offsetTop});
+        }
+        lastAim = e.target.parentNode;
+        bigImg(e.target.parentNode);
+        debugger
+        startMove(_$("#main"), {offsetTop: 0});
+    }
+
+    function findImg(){
+        aLi[4].firstChild.src = changeImg(aLi[4].firstChild.src, 'big', 'small');
+        return aLi[4];
+    }
+    
+    $matrix.addEventListener('touchend',startup, false);
+}
 
 
 
+function bigImg(node){
+    node.style.transform = 'scale(1.5, 1.5)';
+    node.style.zIndex = iMinZindex++;
+}
 
+function changeImg(str, reg, newreg){
+    return str && str.replace(reg, newreg);
+}
 
 function getStyle(obj, attr)
 {
@@ -187,9 +182,27 @@ function startMove(obj, json, fn)
     }, 30);
 }
 
+function getQueryStrings(){
+    var qs = (window.location.href.search.length > 0 ?  location.search.substring(1) : ""),
+        params = {},
+        items = qs.length ? qs.split('&') : [],
+        item = null,
+        name = null,
+        value = null,
+        i = 0,
+        len = items.length;
 
+    for(i = 0; i < len; i++) {
+        item = items[i].split('=');
+        name = decodeURIComponent(item[0]);
+        value = decodeURIComponent(item[1]);
 
-
+        if(name.length) {
+            params[name] = value;
+        }
+    }
+    return params;
+}
 
 
 
