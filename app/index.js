@@ -76,6 +76,7 @@ window.onload = function(){
         lastNode,
         notFinsh = true;
     function startup(e) {
+        console.log(e.target.parentNode);
         e.target.src = changeImg(e.target.src, 'small', 'big');
         for(var i = 0; i < aLi.length; i++) {
             if(~aLi[i].style.transform.indexOf('scale')) {
@@ -96,7 +97,6 @@ window.onload = function(){
         }
         lastAim = e.target.parentNode;
         bigImg(e.target.parentNode);
-        debugger
         startMove(_$("#main"), {offsetTop: 0});
     }
 

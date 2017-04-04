@@ -55,3 +55,29 @@ body {
         display: block;
     }
 }
+
+#footer {
+    width:3.2rem;
+    border: 1px solid cadetblue;
+    height: 3rem;
+    margin: 0 auto;
+
+    .show {
+        width:1.5rem;
+        height: 2.67rem;
+        background: pink;
+        float: left;
+    }
+    .save {
+        margin-left: 0.22rem;
+        float: left;
+        
+    }
+    .btn-try {
+        background: #3183f7;
+        width: 1rem;
+        height: 0.5rem;
+        border: 0;
+        color: wheat;
+    }
+}
