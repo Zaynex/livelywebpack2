@@ -38,7 +38,9 @@ var _$$ = function(nodes){
     return document.querySelectorAll(nodes);
 };
 
-var $matrix = _$('.matrix');
+var trlUrl,
+    $matrix = _$('.matrix'),
+    baseGifUrl = './app/imgs/gif/';
 function init(){
     var centerImg = getQueryStrings() && getQueryStrings().keyfrom;
     if(centerImg) {
@@ -50,12 +52,22 @@ function init(){
     }
     $matrix.innerHTML = imglist;
     bigImg($matrix.children[4])
+
+    var gifSource = new Image();
+        gifSource.src = baseGifUrl + centerImg + '.gif';
+        gifSource.onload = function(){
+            _$('.show').appendChild(gifSource);
+        }
+    
+    var typeSource = getQueryStrings() && getQueryStrings().type;
+    trlUrl = typeSource === 0 ? 'loadfromnote' : 'loadfromweb';
 }
 init();
 
 
 window.onload = function(){
     var aLi = _$$('li'),
+        $try = _$('.btn-try'),
         aPos = [];
     // 获得当前的状态获得他们的left和top
     for(let i = 0;i < aLi.length; i++) {
@@ -76,8 +88,9 @@ window.onload = function(){
         lastNode,
         notFinsh = true;
     function startup(e) {
-        console.log(e.target.parentNode);
         e.target.src = changeImg(e.target.src, 'small', 'big');
+        var clickImgSrc = e.target.src.substring(e.target.src.indexOf('big/') + 4);      
+        _$('.show').lastChild.src = baseGifUrl + clickImgSrc.split('png')[0] + 'gif';
         for(var i = 0; i < aLi.length; i++) {
             if(~aLi[i].style.transform.indexOf('scale')) {
                 aLi[i].style.transform = '';
@@ -97,7 +110,7 @@ window.onload = function(){
         }
         lastAim = e.target.parentNode;
         bigImg(e.target.parentNode);
-        startMove(_$("#main"), {offsetTop: 0});
+        gotoNode();
     }
 
     function findImg(){
@@ -105,7 +118,16 @@ window.onload = function(){
         return aLi[4];
     }
     
+    function gotoNode(){
+        document.body.scrollTop = 0;
+        _$('#hd').style.display = 'none';     
+        
+    }
+    function downLoad(){
+        window.location.href = 'http.note.youdao.com';
+    }
     $matrix.addEventListener('touchend',startup, false);
+    $try.addEventListener('touchend', downLoad, false);
 }
 
 
@@ -164,7 +186,7 @@ function startMove(obj, json, fn)
                 obj.style.filter='alpha(opacity:'+(iCur+iSpeed)+')';
                 obj.style.opacity=(iCur+iSpeed)/100;
             }
-            else
+            else 
             {
                 obj.style[attr]=iCur+iSpeed+'px';
             }

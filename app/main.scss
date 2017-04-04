@@ -60,18 +60,32 @@ body {
     width:3.2rem;
     border: 1px solid cadetblue;
     height: 3rem;
-    margin: 0 auto;
-
+    // margin: .33rem auto 0;
+    margin: .33rem auto;
+    
     .show {
         width:1.5rem;
         height: 2.67rem;
         background: pink;
         float: left;
+
+        img{
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
     }
     .save {
+        width: 1.48rem;
         margin-left: 0.22rem;
         float: left;
         
+        h3{
+            font-size: 0.2rem;
+        }
+        h4 {
+            font-size: 0.16rem;
+        }
     }
     .btn-try {
         background: #3183f7;
