@@ -1,0 +1,167 @@
+#entry {
+    width: 3.75rem; 
+}
+
+.bg-intro {
+    width: 3.75rem;
+    height: 2.80rem;
+    background: #d9ebff; 
+}
+.bg-intro .bg {
+    width: 3.75rem;
+    height: 2.80rem;
+    opacity: 0; 
+}
+.bg-intro .loaded {
+transition: opacity .2s ease-in .25s;
+opacity: 1; 
+}
+
+.content-intro {
+    text-align: center;
+    margin: 0 auto .11rem auto;
+    width: 3.2rem; 
+}
+.content-intro .content-core {
+    margin: 0.14rem auto;
+    width: 2.6rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+}
+.content-intro .content-core .content-title {
+    font-family: 'PingFang SC Semibold';
+    font-weight: bold; 
+}
+.content-intro .content-core .baseline {
+    width: .55rem;
+    height: .02rem;
+    border-radius: .0075rem; 
+}
+.content-intro .content-core .line1 {
+    background: -webkit-linear-gradient(left, rgba(176, 207, 250, 0) 0%, #b0cffa 100%); 
+}
+.content-intro .content-core .line2 {
+    background: -webkit-linear-gradient(left, #b0cffa 0%, rgba(176, 207, 250, 0) 100%); 
+}
+.content-intro .content-detail {
+    text-align: left;
+    font-family: 'PingFang SC Light'; 
+}
+.up-to-top {
+    background: #fff;
+    /*transform: translateY(-4rem);*/
+}
+#main {
+    width: 3.2rem;
+    margin: 0 auto;
+    background: #d9ebff;
+    height: 1.81rem;
+    padding: 0.09rem 0 0.14rem 0;
+}
+#main .matrix {
+    width: 3.04rem;
+    display: flex;
+    display: -webkit-flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    position: relative;
+    margin: 0 auto; 
+}
+#main .matrix li {
+    margin-bottom: 0.035em;
+    width: 0.99rem;
+    height: 0.5rem; 
+}
+#main .matrix li img {
+    width: 0.99rem;
+    height: 0.5rem;
+    display: block; 
+}
+#main .tips {
+    position: relative;
+    top: 1.65rem;
+    text-align: center; 
+}
+
+#footer {
+    width: 3.2rem;
+    margin: .33rem auto;
+    display: flex; 
+}
+#footer .show {
+    width: 1.5rem;
+    height: 2.67rem; 
+}
+#footer .show .playSrc {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+#footer .save {
+    width: 1.61rem;
+    margin-left: 0.1rem;
+    height: 2.67rem;
+    display: flex;
+    display: -webkit-flex;
+    /* Safari */
+    flex-direction: column;
+    justify-content: space-between;
+    align-content: space-between; 
+}
+#footer .save .vertical-top, #footer .save .vertical-second, #footer .save .vertical-third, #footer .save .vertical-bottom {
+    display: flex;
+    flex-direction: column;
+    font-size: .14rem; 
+}
+#footer .save .btn-try {
+    color: #fff;
+    background: -webkit-linear-gradient(left, #4d8eff, #0b90ff);
+    width: 1.28rem;
+    line-height: .34rem;
+    border: 0;
+    border-radius: .035rem;
+    box-shadow: -1px 2px 5px #2999ff; 
+}
+
+.ft-en {
+    font-size: .195rem; 
+}
+
+.ft-14 {
+    font-size: .14rem; 
+}
+
+.ft-8 {
+    font-size: .08rem; 
+}
+
+.ft-19 {
+    font-size: .19rem; 
+}
+
+.ft-17 {
+    font-size: .17rem; 
+}
+
+.ft-regular {
+    font-family: 'PingFang SC Regular'; 
+}
+
+.ft-medium {
+    font-family: 'PingFang SC Medium'; 
+}
+
+.base-font-color {
+    color: #3183f7; 
+}
+
+.shadow-img {
+    box-shadow: 0 0 0.135rem rgba(42, 137, 247, 0.22); 
+}
+
+.scale-img {
+    transform: scale(1.4343, 1.44); 
+}
+
+/*# sourceMappingURL=main.css.map */

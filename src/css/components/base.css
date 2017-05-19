@@ -1,0 +1,41 @@
+html, body, div, span, ul, li, img, p, h1, h2, h3, h4, p {
+  margin: 0;
+  padding: 0; 
+}
+ul, li {
+  list-style: none;
+}
+body, html {
+    height: 100%;
+    font-family: 'Arial', 'Microsoft YaHei';
+}
+.ft-en {
+    font-size: .195rem;
+}
+.ft-14 {
+    font-size: .14rem;
+}
+.ft-8 {
+    font-size: .08rem;
+}
+.ft-19 {
+    font-size: .19rem;
+}
+.ft-17 {
+    font-size: .17rem;
+}
+.ft-regular {
+    font-family: 'PingFang SC Regular';
+}
+.ft-medium{
+    font-family: 'PingFang SC Medium';
+}
+.base-font-color {
+    color: #3183f7;
+}
+.shadow-img{
+    box-shadow: 0 0 0.135rem rgba(42, 137, 247, 0.22);
+}
+.scale-img {
+    transform: scale(1.4343, 1.44); 
+}
